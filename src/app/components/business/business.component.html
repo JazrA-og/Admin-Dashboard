@@ -1,0 +1,315 @@
+<div class="container padding container_actions">
+  <div class="d-flex justify-content-between">
+    <div>
+      <button type="button" class="btn btn-outline-info" (click)="goBack()">
+        <span class="fa fa-arrow-left"></span>
+      </button>
+    </div>
+    <div>
+      <div class="row">
+        <div class="col col-6">
+          <button
+            type="button"
+            class="btn btn-outline-warning"
+            data-toggle="collapse"
+            data-target="#searchDiv"
+            aria-expanded="false"
+            aria-controls="searchDiv"
+          >
+            <span class="fa fa-filter"></span>
+          </button>
+        </div>
+        <div class="col col-6">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="AddEntry()"
+          >
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="searchDiv" class="collapse container search_criteria_section">
+  <form fxLayout="column" #searchform="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Name"
+        type="text"
+        name="NAME"
+        [(ngModel)]="searchModel.NAME"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Username"
+        type="text"
+        name="USERNAME"
+        [(ngModel)]="searchModel.USERNAME"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Password"
+        type="text"
+        name="PASSWORD"
+        [(ngModel)]="searchModel.PASSWORD"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Email"
+        type="text"
+        name="EMAIL"
+        [(ngModel)]="searchModel.EMAIL"
+      />
+    </mat-form-field>
+    <!-- <mat-form-field>
+      <textarea
+        matTextareaAutosize
+        matInput
+        name="DESCRIPTION"
+        placeholder="Description"
+        rows="1"
+        [(ngModel)]="searchModel.DESCRIPTION"
+      ></textarea>
+    </mat-form-field> -->
+    <div class="row">
+      <div class="col col-md-12">
+        <button
+          [disabled]="!searchform.valid"
+          mat-raised-button
+          color="primary"
+          type="button"
+          class="btn btn-outline-secondary btn-block"
+          (click)="ClearAndFetch()"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<div
+  class="container"
+  (scrolled)="onScroll()"
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="300"
+>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Business Name</th>
+        <!-- <th scope="col">Last Name</th> -->
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Is_Active</th>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let item of data; index as i">
+      <tr>
+        <th scope="row">{{ item.BUSINESS_ID }}</th>
+        <td>
+          {{ item.NAME }}
+        </td>
+        <!-- <td>{{ item.NAME }}</td> -->
+        <td>{{ item.USERNAME }}</td>
+        <td>{{ item.EMAIL }}</td>
+        <td>{{ item.IS_ACTIVE }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="selectItem(item)"
+            [attr.aria-expanded]="!isCollapsed"
+            aria-controls="collapseExample"
+          >
+            View Info
+          </button>
+        </td>
+      </tr>
+
+      <!-- Start Collapsing Content  -->
+      <tr *ngIf="selectedItem === item">
+        <td>
+          <!-- Start Form -->
+
+          <form fxLayout="column" #f="ngForm">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Name"
+                type="text"
+                name="NAME"
+                [(ngModel)]="item.NAME"
+                required
+              /><mat-error>Name is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Username"
+                type="text"
+                name="USERNAME"
+                [(ngModel)]="item.USERNAME"
+                required
+              /><mat-error>Username is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Password"
+                type="password"
+                name="PASSWORD"
+                [(ngModel)]="item.PASSWORD"
+                required
+              /><mat-error>Password is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Email"
+                type="text"
+                name="EMAIL"
+                [(ngModel)]="item.EMAIL"
+                required
+              /><mat-error>Email is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Phone Number"
+                type="number"
+                name="PHONE_NUMBER"
+                [(ngModel)]="item.PHONE_NUMBER"
+                required
+              /><mat-error>Phone Number is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Intervention Time"
+                type="number"
+                name="INTERVENTION_TIME"
+                [(ngModel)]="item.INTERVENTION_TIME"
+                required
+              /><mat-error>Intervention Time is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Minimum Cost"
+                type="number"
+                name="MINIMUM_COST"
+                [(ngModel)]="item.MINIMUM_COST"
+                required
+              /><mat-error>Minimum Cost is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <textarea
+                matTextareaAutosize
+                matInput
+                name="DESCRIPTION"
+                placeholder="Description"
+                rows="1"
+                [(ngModel)]="item.DESCRIPTION"
+              ></textarea
+              ><mat-error>Description is required</mat-error>
+            </mat-form-field>
+            <mat-checkbox
+              color="primary"
+              name="IS_VALIDATED"
+              [(ngModel)]="item.IS_VALIDATED"
+              >Is Validated</mat-checkbox
+            >
+            <mat-checkbox
+              color="primary"
+              name="IS_CHECKMARK"
+              [(ngModel)]="item.IS_CHECKMARK"
+              >Is Checkmark</mat-checkbox
+            >
+            <mat-checkbox
+              color="primary"
+              name="IS_ACTIVE"
+              [(ngModel)]="item.IS_ACTIVE"
+              >Is Active</mat-checkbox
+            >
+            <!-- <mat-checkbox
+              color="primary"
+              name="IS_BOOSTED"
+              [(ngModel)]="item.IS_BOOSTED"
+              >Is Boosted</mat-checkbox
+            > -->
+            <div class="row">
+              <div class="col col-md-6">
+                <button
+                  [disabled]="!f.valid"
+                  mat-raised-button
+                  color="primary"
+                  type="button"
+                  class="btn btn-outline-secondary btn-block"
+                  (click)="Edit(item)"
+                >
+                  Save
+                </button>
+              </div>
+              <div class="col col-md-6">
+                <button
+                  mat-raised-button
+                  color="warn"
+                  type="button"
+                  class="btn btn-outline-danger btn-block"
+                  (click)="Delete(item)"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </form>
+          <!-- End Form -->
+        </td>
+        <td><div></div></td>
+        <td>
+          <!-- Start Work Area  -->
+          <h5>Business Work Area</h5>
+          <form fxLayout="column" #f="ngForm">
+            <div *ngFor="let workList of item.My_Work_lists;index as i">
+            <mat-checkbox
+            [ngModelOptions]="{standalone: true}"
+              color="primary"
+              (change)="changeCheckBox($event,workList,item)"
+              [(ngModel)]="workList.IS_TRUE"
+              >{{ workList.My_Work_area.NAME }}</mat-checkbox
+            >
+          </div>
+            <div class="row">
+              <div class="col col-md-6">
+                <button
+                  [disabled]="!f.valid"
+                  mat-raised-button
+                  color="primary"
+                  type="button"
+                  class="btn btn-outline-secondary btn-block"
+                  (click)="onSaveCheckBox(item)"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+          <!-- End Work Area -->
+        </td>
+      </tr>
+      <!-- End Collapsing Content -->
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,94 @@
+<div class="container padding container_actions">
+  <div class="d-flex justify-content-between">
+    <div>
+      <button type="button" class="btn btn-outline-info" (click)="goBack()">
+        <span class="fa fa-arrow-left"></span>
+      </button>
+    </div>
+    <div>
+      <div class="row">
+        <div class="col col-12">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="AddEntry()"
+          >
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col col-lg-4" *ngFor="let entry of data">
+      <div class="container entry_section">
+        <form fxLayout="column" #f="ngForm">
+          <mat-form-field>
+            <mat-select placeholder="Business" [(value)]="entry.BUSINESS_ID"
+              ><mat-option>Choose</mat-option
+              ><mat-option
+                *ngFor="let BusinessEntry of BusinessList"
+                [value]="BusinessEntry.BUSINESS_ID"
+                >{{ BusinessEntry.NAME }}</mat-option
+              ></mat-select
+            >
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Work Area" [(value)]="entry.WORK_AREA_ID"
+              ><mat-option>Choose</mat-option
+              ><mat-option
+                *ngFor="let Work_areaEntry of Work_areaList"
+                [value]="Work_areaEntry.WORK_AREA_ID"
+                >{{ Work_areaEntry.NAME }}</mat-option
+              ></mat-select
+            >
+          </mat-form-field>
+          <mat-checkbox
+            color="primary"
+            name="IS_TRUE"
+            [(ngModel)]="entry.IS_TRUE"
+            >Is True</mat-checkbox
+          >
+          <!-- <mat-form-field>
+            <textarea
+              matTextareaAutosize
+              matInput
+              name="DESCRIPTION"
+              placeholder="Description"
+              rows="1"
+              [(ngModel)]="entry.DESCRIPTION"
+            ></textarea
+            ><mat-error>Description is required</mat-error>
+          </mat-form-field> -->
+          <div class="row">
+            <div class="col col-md-6">
+              <button
+                [disabled]="!f.valid"
+                mat-raised-button
+                color="primary"
+                type="button"
+                class="btn btn-outline-secondary btn-block"
+                (click)="Edit(entry)"
+              >
+                Save
+              </button>
+            </div>
+            <div class="col col-md-6">
+              <button
+                mat-raised-button
+                color="warn"
+                type="button"
+                class="btn btn-outline-danger btn-block"
+                (click)="Delete(entry)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

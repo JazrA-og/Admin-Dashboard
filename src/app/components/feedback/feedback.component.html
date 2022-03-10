@@ -1,0 +1,51 @@
+<div class="container padding container_actions">
+<div class="d-flex justify-content-between">
+<div>
+<button type="button" class="btn btn-outline-info" (click)='goBack()'>
+<span class="fa fa-arrow-left"></span>
+</button>
+</div>
+<div>
+<div class="row">
+<div class="col col-12">
+<button type="button" class="btn btn-outline-success" (click)='AddEntry()'>
+<span class="fa fa-plus"></span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div class='row'>
+<div class="col col-lg-4" *ngFor='let entry of data'>
+<div class="container entry_section">
+<form fxLayout='column' #f="ngForm">
+<mat-form-field>
+<input matInput placeholder="Comment" type="text"  name="COMMENT" [(ngModel)]="entry.COMMENT" required /><mat-error>Comment is required</mat-error>
+</mat-form-field>
+<mat-form-field>
+<input matInput placeholder="Rating" type="number"  name="RATING" [(ngModel)]="entry.RATING" required /><mat-error>Rating is required</mat-error>
+</mat-form-field>
+<mat-form-field>
+<input matInput type="date" placeholder="Date"  name="DATE" [(ngModel)]="entry.DATE" required /><mat-error>Date is required</mat-error>
+</mat-form-field>
+<mat-form-field>
+<input matInput placeholder="Time" type="text"  name="TIME" [(ngModel)]="entry.TIME" required /><mat-error>Time is required</mat-error>
+</mat-form-field>
+<mat-form-field>
+<textarea matTextareaAutosize  matInput name="DESCRIPTION" placeholder="Description" rows="1" [(ngModel)]="entry.DESCRIPTION"></textarea><mat-error>Description is required</mat-error>
+</mat-form-field>
+<div class="row">
+<div class='col col-md-6'>
+<button [disabled]='!f.valid' mat-raised-button color='primary' type="button" class="btn btn-outline-secondary btn-block" (click)='Edit(entry)'>Save</button>
+</div>
+<div class='col col-md-6'>
+<button mat-raised-button color='warn' type="button" class="btn btn-outline-danger btn-block" (click)="Delete(entry)">Delete</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>

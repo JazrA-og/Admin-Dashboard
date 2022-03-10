@@ -1,0 +1,46 @@
+<div class="container padding container_actions">
+<div class="d-flex justify-content-between">
+<div>
+<button type="button" class="btn btn-outline-info" (click)='goBack()'>
+<span class="fa fa-arrow-left"></span>
+</button>
+</div>
+<div>
+<div class="row">
+<div class="col col-12">
+<button type="button" class="btn btn-outline-success" (click)='AddEntry()'>
+<span class="fa fa-plus"></span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div class='row'>
+<div class="col col-lg-4" *ngFor='let entry of data'>
+<div class="container entry_section">
+<form fxLayout='column' #f="ngForm">
+<mat-form-field>
+<input matInput placeholder="Username" type="text"  name="USERNAME" [(ngModel)]="entry.USERNAME" required /><mat-error>Username is required</mat-error>
+</mat-form-field>
+<mat-form-field>
+<input matInput placeholder="Password" type="text"  name="PASSWORD" [(ngModel)]="entry.PASSWORD" required /><mat-error>Password is required</mat-error>
+</mat-form-field>
+<mat-form-field>
+<mat-select placeholder="User Type" [(value)]='entry.USER_TYPE_CODE'><mat-option>Choose</mat-option><mat-option *ngFor='let User_typeEntry of User_typeList' >{{User_typeEntry}}</mat-option></mat-select>
+</mat-form-field>
+<mat-checkbox color="primary"  name="IS_ACTIVE" [(ngModel)]="entry.IS_ACTIVE">Is Active</mat-checkbox>
+<div class="row">
+<div class='col col-md-6'>
+<button [disabled]='!f.valid' mat-raised-button color='primary' type="button" class="btn btn-outline-secondary btn-block" (click)='Edit(entry)'>Save</button>
+</div>
+<div class='col col-md-6'>
+<button mat-raised-button color='warn' type="button" class="btn btn-outline-danger btn-block" (click)="Delete(entry)">Delete</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>

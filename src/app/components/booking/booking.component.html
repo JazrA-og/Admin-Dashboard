@@ -1,0 +1,336 @@
+<div class="container padding container_actions">
+  <div class="d-flex justify-content-between">
+    <div>
+      <button type="button" class="btn btn-outline-info" (click)="goBack()">
+        <span class="fa fa-arrow-left"></span>
+      </button>
+    </div>
+    <div>
+      <div class="row">
+        <div class="col col-6">
+          <button
+            type="button"
+            class="btn btn-outline-warning"
+            data-toggle="collapse"
+            data-target="#searchDiv"
+            aria-expanded="false"
+            aria-controls="searchDiv"
+          >
+            <span class="fa fa-filter"></span>
+          </button>
+        </div>
+        <div class="col col-6">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="AddEntry()"
+          >
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="searchDiv" class="collapse container search_criteria_section">
+  <form fxLayout="column" #searchform="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Client Name"
+        type="text"
+        name="FIRST_NAME"
+        [(ngModel)]="oFirstName"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Business Name"
+        type="text"
+        name="NAME"
+        [(ngModel)]="oBusinessName"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Service Name"
+        type="text"
+        name="NAME"
+        [(ngModel)]="oServiceName"
+      />
+    </mat-form-field>
+    <!-- <mat-form-field>
+      <textarea
+        matTextareaAutosize
+        matInput
+        name="DESCRIPTION"
+        placeholder="Description"
+        rows="1"
+        [(ngModel)]="searchModel.DESCRIPTION"
+      ></textarea>
+    </mat-form-field> -->
+    <div class="row">
+      <div class="col col-md-12">
+        <button
+          [disabled]="!searchform.valid"
+          mat-raised-button
+          color="primary"
+          type="button"
+          class="btn btn-outline-secondary btn-block"
+          (click)="filterData(oBusinessName,oFirstName,oServiceName)"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<div
+  class="container"
+  (scrolled)="onScroll()"
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="300"
+>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Client</th>
+        <th scope="col">Business</th>
+        <th scope="col">Service</th>
+        <th scope="col">Total price</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let booking of data; index as i">
+      <tr>
+        <th scope="row">{{ booking.BOOKING_ID }}</th>
+        <td>
+          {{ booking.My_Client?.FIRST_NAME }}
+        </td>
+        <td>{{ booking.My_Business?.NAME }}</td>
+        <td>{{ booking.My_Service_prod?.NAME }}</td>
+
+        <td>{{ booking.TOTAL_PRICE }}</td>
+        <td>{{ booking.My_Status?.NAME }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="selectItem(booking)"
+            [attr.aria-expanded]="!isCollapsed"
+            aria-controls="collapseExample"
+          >
+            View Info
+          </button>
+        </td>
+      </tr>
+
+      <!-- Start Collapsing Content -->
+      <tr *ngIf="selectedItem === booking">
+        <td>
+          <!-- Start Form -->
+          <form fxLayout="column" #f="ngForm">
+            <mat-form-field>
+              <mat-select placeholder="Business" [(value)]="booking.BUSINESS_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let BusinessEntry of BusinessList"
+                  [value]="BusinessEntry.BUSINESS_ID"
+                  (click)="fetchServices(BusinessEntry.BUSINESS_ID)"
+                  >{{ BusinessEntry.NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select
+                placeholder="Service Prod"
+                [(value)]="booking.SERVICE_PROD_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let Service_prodEntry of Service_prodList"
+                  [value]="Service_prodEntry.SERVICE_PROD_ID"
+                  >{{ Service_prodEntry.NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Client" [(value)]="booking.CLIENT_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let ClientEntry of ClientList"
+                  [value]="ClientEntry.CLIENT_ID"
+                  >{{ ClientEntry.FIRST_NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field>
+
+            <!-- <mat-form-field>
+              <mat-select
+                placeholder="Work Area"
+                [(value)]="booking.WORK_AREA_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let Work_areaEntry of Work_areaList"
+                  [value]="Work_areaEntry.WORK_AREA_ID"
+                  >{{ Work_areaEntry.NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field> -->
+            <mat-form-field>
+              <input
+                matInput
+                type="date"
+                placeholder="Date"
+                name="DATE"
+                [(ngModel)]="booking.DATE"
+              /><mat-error>Date is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Total Price"
+                type="number"
+                name="TOTAL_PRICE"
+                [(ngModel)]="booking.TOTAL_PRICE"
+              /><mat-error>Total Price is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Status" [(value)]="booking.STATUS_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let StatusEntry of StatusList"
+                  [value]="StatusEntry.STATUS_ID"
+                  >{{ StatusEntry.NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field>
+            <mat-form-field>
+              <textarea
+                matTextareaAutosize
+                matInput
+                name="DESCRIPTION"
+                placeholder="Description"
+                rows="1"
+                [(ngModel)]="booking.DESCRIPTION"
+              ></textarea
+              ><mat-error>Description is required</mat-error>
+            </mat-form-field>
+            <div class="row">
+              <div class="col col-md-6">
+                <button
+                  [disabled]="!f.valid"
+                  mat-raised-button
+                  color="primary"
+                  type="button"
+                  class="btn btn-outline-secondary btn-block"
+                  (click)="Edit(booking)"
+                >
+                  Save
+                </button>
+              </div>
+              <div class="col col-md-6">
+                <button
+                  mat-raised-button
+                  color="warn"
+                  type="button"
+                  class="btn btn-outline-danger btn-block"
+                  (click)="Delete(booking)"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </form>
+          <!-- End Form -->
+        </td>
+        <td></td>
+        <td></td>
+        <td>
+          <!-- Start Rating  -->
+          <div
+            class="row entry_section_child"
+            *ngFor="let childFeedback of booking.My_Feedbacks; let i = index"
+          >
+            <form fxLayout="column" #fFeedback="ngForm">
+              <div class="row m-0">
+                <div class="col-md">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      placeholder="Comment"
+                      type="text"
+                      name="COMMENT"
+                      [(ngModel)]="childFeedback.COMMENT"
+                    /><mat-error>Comment is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      placeholder="Rating"
+                      type="number"
+                      name="RATING"
+                      [(ngModel)]="childFeedback.RATING"
+
+                    /><mat-error>Rating is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      type="date"
+                      placeholder="Date"
+                      name="DATE"
+                      [(ngModel)]="childFeedback.DATE"
+
+                    /><mat-error>Date is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-md">
+                  <mat-form-field>
+                    <textarea
+                      matTextareaAutosize
+                      matInput
+                      name="DESCRIPTION"
+                      placeholder="Description"
+                      rows="1"
+                      [(ngModel)]="childFeedback.DESCRIPTION"
+
+                    ></textarea
+                    ><mat-error>Description is required</mat-error>
+                  </mat-form-field>
+                </div> -->
+                <div class="col-md">
+                  <button
+                    [disabled]="!fFeedback.valid"
+                    type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="Edit_Feedback(booking, childFeedback)"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="Cancel_Feedback(booking, childFeedback)"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- End Rating -->
+        </td>
+      </tr>
+      <!-- End Collapsing Content -->
+    </tbody>
+  </table>
+</div>

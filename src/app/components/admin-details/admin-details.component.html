@@ -1,0 +1,90 @@
+
+<!-- Start Form -->
+
+<div class="container entry_section">
+  <form fxLayout="column" #f="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="First Name"
+        type="text"
+        name="FIRST_NAME"
+        [(ngModel)]="i_Admin.FIRST_NAME"
+        required
+      /><mat-error>First Name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Last Name"
+        type="text"
+        name="LAST_NAME"
+        [(ngModel)]="i_Admin.LAST_NAME"
+        required
+      /><mat-error>Last Name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Username"
+        type="text"
+        name="USERNAME"
+        [(ngModel)]="i_Admin.USERNAME"
+        required
+      /><mat-error>Username is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Password"
+        type="password"
+        name="PASSWORD"
+        [(ngModel)]="i_Admin.PASSWORD"
+        required
+      /><mat-error>Password is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Email"
+        type="text"
+        name="EMAIL"
+        [(ngModel)]="i_Admin.EMAIL"
+        required
+      /><mat-error>Email is required</mat-error>
+    </mat-form-field>
+    <mat-checkbox
+      color="primary"
+      name="IS_ACTIVE"
+      [(ngModel)]="i_Admin.IS_ACTIVE"
+      >Is Active</mat-checkbox
+    >
+    <div class="row">
+      <div class="col col-md-6">
+        <button
+          [disabled]="!f.valid"
+          mat-raised-button
+          color="primary"
+          type="button"
+          class="btn btn-outline-secondary btn-block"
+          (click)="Edit(i_Admin)"
+        >
+          Save
+        </button>
+      </div>
+      <div class="col col-md-6">
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          class="btn btn-outline-danger btn-block"
+          (click)="Delete(i_Admin)"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- End Form -->

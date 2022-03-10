@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <div class="col col-md-4 menu_entry  pointer" (click)='MenuHandler(menu)' *ngFor='let menu of entries' >
+        <i [class]="menu.fa_icon "></i>
+        <div class='menu_entry_title'>{{menu.title}}</div>
+    </div>
+  </div>
+</div>

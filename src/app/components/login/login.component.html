@@ -1,0 +1,19 @@
+<div class="col-lg-12 login_main_container">
+  <form
+      style='padding:10px'
+      fxLayout='column'
+      fxLayoutAlign='center'
+      name="form"
+      (ngSubmit)="f.form.valid && login()"
+      #f="ngForm" novalidate>
+    <mat-form-field>
+      <input type='text'  matInput placeholder="User Name" name='username' [(ngModel)]="model.UserName" #username="ngModel" required>
+    </mat-form-field>
+    <mat-error *ngIf="f.submitted && !username.valid">User name is required</mat-error>
+    <mat-form-field>
+      <input type='password' matInput placeholder="Password" name="password" [(ngModel)]="model.Password" #password="ngModel" required>
+    </mat-form-field>
+    <mat-error *ngIf="f.submitted && !password.valid">Pasword is required</mat-error>
+    <button [disabled]="loading || !f.form.valid" mat-raised-button color='primary'>Login</button>
+  </form>
+</div>

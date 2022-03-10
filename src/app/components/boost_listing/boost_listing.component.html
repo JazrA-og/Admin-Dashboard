@@ -1,0 +1,243 @@
+<div class="container padding container_actions">
+  <div class="d-flex justify-content-between">
+    <div>
+      <button type="button" class="btn btn-outline-info" (click)="goBack()">
+        <span class="fa fa-arrow-left"></span>
+      </button>
+    </div>
+    <div>
+      <div class="row">
+        <div class="col col-6">
+          <button
+            type="button"
+            class="btn btn-outline-warning"
+            data-toggle="collapse"
+            data-target="#searchDiv"
+            aria-expanded="false"
+            aria-controls="searchDiv"
+          >
+            <span class="fa fa-filter"></span>
+          </button>
+        </div>
+        <div class="col col-6">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="AddEntry()"
+          >
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="searchDiv" class="collapse container search_criteria_section">
+  <form fxLayout="column" #searchform="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Service Name"
+        type="text"
+        name="NAME"
+        [(ngModel)]="filterModel"
+      />
+    </mat-form-field>
+    <!-- <mat-form-field>
+      <input
+        matInput
+        placeholder="Service Name"
+        type="text"
+        name="SERVICE_NAME"
+        [(ngModel)]="model.service_name"
+      />
+    </mat-form-field> -->
+    <div class="row">
+      <div class="col col-md-12">
+        <button
+          [disabled]="!searchform.valid"
+          mat-raised-button
+          color="primary"
+          type="button"
+          class="btn btn-outline-secondary btn-block"
+          (click)="filterData()"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<div
+  class="container"
+  (scrolled)="onScroll()"
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="300"
+>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Service</th>
+        <th scope="col">Business</th>
+        <!-- <th scope="col">Username</th> -->
+        <th scope="col">Active</th>
+        <th scope="col">Paid</th>
+        <th scope="col">Completed</th>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let item of data; index as i">
+      <tr>
+        <th scope="row">{{ item.BOOST_LISTING_ID }}</th>
+        <td>
+          {{ item.My_Service_prod?.NAME }}
+        </td>
+        <td>{{ item.My_Boost_pricing?.TOTAL_PRICE }}</td>
+        <!-- <td>{{ item.IS_PAID }}</td> -->
+        <td>{{ item.IS_ACTIVE }}</td>
+        <td>{{ item.IS_PAID }}</td>
+        <td>{{ item.IS_COMPLETED }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="selectItem(item)"
+            [attr.aria-expanded]="!isCollapsed"
+            aria-controls="collapseExample"
+          >
+            View Info
+          </button>
+        </td>
+      </tr>
+
+      <!-- Start Form -->
+      <tr *ngIf="selectedItem === item">
+        <td>
+          <form fxLayout="column" #f="ngForm">
+            <mat-form-field>
+              <mat-select
+                placeholder="Service Prod"
+                [(value)]="item.SERVICE_PROD_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let Service_prodEntry of Service_prodList"
+                  [value]="Service_prodEntry.SERVICE_PROD_ID"
+                  >{{ Service_prodEntry?.NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select
+                placeholder="Boost Pricing"
+                [(value)]="item.BOOST_PRICING_ID"
+                ><mat-option>Choose</mat-option
+                ><mat-option
+                  *ngFor="let Boost_pricingEntry of Boost_pricingList"
+                  [value]="Boost_pricingEntry.BOOST_PRICING_ID"
+                  >{{ Boost_pricingEntry?.NAME }}</mat-option
+                ></mat-select
+              >
+            </mat-form-field>
+            <!-- <mat-form-field>
+              <input
+                matInput
+                type="date"
+                placeholder="Start Date"
+                name="START_DATE"
+                [(ngModel)]="item.START_DATE"
+                required
+              /><mat-error>Start Date is required</mat-error>
+            </mat-form-field> -->
+            <!-- <mat-form-field>
+              <input
+                matInput
+                type="date"
+                placeholder="End Date"
+                name="END_DATE"
+                [(ngModel)]="item.END_DATE"
+                required
+              /><mat-error>End Date is required</mat-error>
+            </mat-form-field> -->
+            <!-- <mat-form-field>
+              <input
+                matInput
+                placeholder="Start Time"
+                type="text"
+                name="START_TIME"
+                [(ngModel)]="item.START_TIME"
+              /><mat-error>Start Time is required</mat-error>
+            </mat-form-field> -->
+            <!-- <mat-form-field>
+              <input
+                matInput
+                placeholder="End Time"
+                type="text"
+                name="END_TIME"
+                [(ngModel)]="item.END_TIME"
+                required
+              /><mat-error>End Time is required</mat-error>
+            </mat-form-field> -->
+            <mat-checkbox
+              color="primary"
+              name="IS_ACTIVE"
+              [(ngModel)]="item.IS_ACTIVE"
+              >Is Active</mat-checkbox
+            >
+            <mat-checkbox
+              color="primary"
+              name="IS_PAID"
+              [(ngModel)]="item.IS_PAID"
+              >Is Paid
+            </mat-checkbox>
+            <mat-checkbox
+              color="primary"
+              name="IS_COMPLETED"
+              [(ngModel)]="item.IS_COMPLETED"
+              >Is Completed
+            </mat-checkbox>
+
+            <mat-form-field>
+              <textarea
+                matTextareaAutosize
+                matInput
+                name="DESCRIPTION"
+                placeholder="Description"
+                rows="1"
+                [(ngModel)]="item.DESCRIPTION"
+              ></textarea
+              ><mat-error>Description is required</mat-error>
+            </mat-form-field>
+            <div class="row">
+              <div class="col col-md-6">
+                <button
+                  [disabled]="!f.valid"
+                  mat-raised-button
+                  color="primary"
+                  type="button"
+                  class="btn btn-outline-secondary btn-block"
+                  (click)="Edit(item)"
+                >
+                  Save
+                </button>
+              </div>
+              <div class="col col-md-6">
+                <button
+                  mat-raised-button
+                  color="warn"
+                  type="button"
+                  class="btn btn-outline-danger btn-block"
+                  (click)="Delete(item)"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      <!-- End Form -->
+    </tbody>
+  </table>
+</div>

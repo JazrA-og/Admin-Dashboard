@@ -1,0 +1,8 @@
+.login_main_container
+{
+    margin-top:80%;
+    border:2px solid white;
+    border-radius:10px;
+    color:white;    
+    background-color: rgba(0,0,0,0.2);
+}
